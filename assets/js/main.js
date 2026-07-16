@@ -44,25 +44,10 @@
     });
   });
 
-  // ---- Contact form -> mailto ----
-  var form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
-      var get = function (n) {
-        var el = form.elements[n];
-        return el ? el.value.trim() : '';
-      };
-      var name = get('name');
-      var email = get('email');
-      var subject = get('subject');
-      var message = get('message');
-      var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
-      var href = 'mailto:info@capehornadvisors.com'
-        + '?subject=' + encodeURIComponent(subject || 'Website enquiry')
-        + '&body=' + encodeURIComponent(body);
-      window.location.href = href;
-    });
+  // ---- Contact form success banner (FormSubmit redirect back with ?sent=1) ----
+  var successBox = document.getElementById('contact-success');
+  if (successBox && /[?&]sent=1(&|$)/.test(window.location.search)) {
+    successBox.hidden = false;
+    successBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 })();

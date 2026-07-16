@@ -7,7 +7,14 @@ title: Contact
 
 <h4><span class="accent">How is your business running?</span></h4>
 
-<form id="contact-form" class="contact-form">
+<div id="contact-success" class="contact-success" hidden>Thanks — your message has been sent. We'll get back to you shortly.</div>
+
+<form id="contact-form" class="contact-form" action="https://formsubmit.co/info@capehornadvisors.com" method="POST">
+  <input type="hidden" name="_subject" value="New enquiry from capehornadvisors.com">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="{{ '/contact/?sent=1' | absolute_url }}">
+  <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
   <label>Your Name (required)<input type="text" name="name" required></label>
   <label>Your Email (required)<input type="email" name="email" required></label>
   <label>Subject<input type="text" name="subject"></label>
