@@ -6,12 +6,12 @@
     - { title: Approach, url: /approach/ }
     - { title: Cape Horn, url: /cape-horn/ }
 - title: Tools
-  url: "#"
+  url: /tools/
   children:
-    - { title: Operations Analysis, url: /operations-analysis-2/ }
-    - { title: Strategy, url: /a-strategy/ }
-    - { title: Transactions, url: /transactions/ }
-    - { title: Transitions, url: /a-transitions/ }
+    - { title: Operations Analysis, url: /tools/#operations-analysis }
+    - { title: Strategy, url: /tools/#strategy }
+    - { title: Transactions, url: /tools/#transactions }
+    - { title: Transitions, url: /tools/#transitions }
 - title: Engagements
   url: /sample-engagements/
 - title: Partners
