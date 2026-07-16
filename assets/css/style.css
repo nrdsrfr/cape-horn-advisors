@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Kalam:wght@400;700&display=swap');
 
 :root {
-  --accent: #D4AF37;
-  --ink: #14183F;
-  --muted: #5A6480;
-  --band: #10165A;
-  --hero-overlay: rgba(0, 0, 0, 0.15);
+  --accent: #C9A227;
+  --ink: #1C1F2A;
+  --muted: #62697A;
+  --band: #23262E;
+  --band-deep: #15171D;
+  --hero-overlay: rgba(10, 10, 14, 0.4);
   --panel-bg: #f2f2f2;
   --header-h: 76px;
   --wrap: 1120px;
@@ -39,11 +40,11 @@ a:hover { color: var(--accent); }
   align-items: center;
   z-index: 1000;
   padding: 0 24px;
-  background: rgba(16, 22, 90, .35);
+  background: rgba(21, 23, 29, .4);
   transition: background .3s ease, box-shadow .3s ease, height .3s ease;
 }
 .site-header.scrolled {
-  background: rgba(16, 22, 90, .96);
+  background: rgba(21, 23, 29, .97);
   box-shadow: 0 2px 14px rgba(0, 0, 0, .28);
 }
 .header-inner {
@@ -102,7 +103,7 @@ a:hover { color: var(--accent); }
   top: 100%;
   left: 0;
   min-width: 220px;
-  background: rgba(16, 22, 90, .98);
+  background: rgba(21, 23, 29, .98);
   border-top: 3px solid var(--accent);
   border-radius: 0 0 6px 6px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, .3);
@@ -311,7 +312,7 @@ a:hover { color: var(--accent); }
 }
 .tool-section__panel {
   background: var(--panel-bg);
-  padding: 48px 40px;
+  padding: 85px 48px 40px;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -405,7 +406,7 @@ a:hover { color: var(--accent); }
 .contact-form textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, .25);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, .25);
 }
 .contact-form textarea { resize: vertical; }
 .contact-form button {
@@ -428,8 +429,9 @@ a:hover { color: var(--accent); }
 
 /* ---------- Footer ---------- */
 .site-footer {
-  background: #10165A;
-  color: #b7bdc4;
+  background: var(--band-deep);
+  border-top: 3px solid var(--accent);
+  color: #a9afba;
   text-align: center;
   padding: 40px 24px;
 }
@@ -485,7 +487,7 @@ a:hover { color: var(--accent); }
     right: 0;
     width: min(320px, 84vw);
     height: calc(100vh - var(--header-h));
-    background: rgba(16, 22, 90, .98);
+    background: rgba(21, 23, 29, .98);
     padding: 12px 0;
     overflow-y: auto;
     transform: translateX(100%);
