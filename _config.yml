@@ -1,0 +1,11 @@
+title: Cape Horn Advisors
+description: Business Advisory Services - Insight That Matters
+url: ""
+baseurl: ""
+plugins:
+  - jekyll-seo-tag
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - capehornadvisors.WordPress.2026-07-16.xml
+  - README.md

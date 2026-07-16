@@ -1,0 +1,20 @@
+- title: Home
+  url: /
+  children:
+    - { title: What We Do, url: /what-we-do/ }
+    - { title: Mission, url: /mission/ }
+    - { title: Approach, url: /approach/ }
+    - { title: Cape Horn, url: /cape-horn/ }
+- title: Tools
+  url: "#"
+  children:
+    - { title: Operations Analysis, url: /operations-analysis-2/ }
+    - { title: Strategy, url: /a-strategy/ }
+    - { title: Transactions, url: /transactions/ }
+    - { title: Transitions, url: /a-transitions/ }
+- title: Engagements
+  url: /sample-engagements/
+- title: Partners
+  url: /partners/
+- title: Contact
+  url: /contact/

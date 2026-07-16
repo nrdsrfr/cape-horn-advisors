@@ -1,0 +1,68 @@
+(function () {
+  'use strict';
+
+  // ---- Sticky header: toggle .scrolled past 40px ----
+  var header = document.querySelector('.site-header');
+  function onScroll() {
+    if (!header) return;
+    if (window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- Hamburger: toggle body.nav-open ----
+  var hamburger = document.querySelector('.hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', function () {
+      var open = document.body.classList.toggle('nav-open');
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // ---- Mobile submenu toggles (tap parent -> expand) ----
+  var MOBILE = 820;
+  document.querySelectorAll('.main-nav .has-children').forEach(function (li) {
+    var trigger = li.querySelector(':scope > a, :scope > .nav-toggle-label');
+    if (!trigger) return;
+    trigger.addEventListener('click', function (e) {
+      if (window.innerWidth > MOBILE) return; // desktop uses hover
+      var href = trigger.getAttribute('href');
+      // Label-only parents (href="#" or none) always just toggle; real links
+      // toggle on first tap when closed, then navigate on the follow-up tap.
+      if (!href || href === '#' || !li.classList.contains('open')) {
+        e.preventDefault();
+        li.classList.toggle('open');
+      }
+    });
+  });
+
+  // Close mobile menu when a real link is followed
+  document.querySelectorAll('.main-nav .submenu a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      document.body.classList.remove('nav-open');
+    });
+  });
+
+  // ---- Contact form -> mailto ----
+  var form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      var get = function (n) {
+        var el = form.elements[n];
+        return el ? el.value.trim() : '';
+      };
+      var name = get('name');
+      var email = get('email');
+      var subject = get('subject');
+      var message = get('message');
+      var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
+      var href = 'mailto:info@capehornadvisors.com'
+        + '?subject=' + encodeURIComponent(subject || 'Website enquiry')
+        + '&body=' + encodeURIComponent(body);
+      window.location.href = href;
+    });
+  }
+})();
