@@ -1,10 +1,10 @@
 - title: Home
   url: /
   children:
-    - { title: What We Do, url: /what-we-do/ }
-    - { title: Mission, url: /mission/ }
-    - { title: Approach, url: /approach/ }
-    - { title: Cape Horn, url: /cape-horn/ }
+    - { title: What We Do, url: /#what-we-do }
+    - { title: Mission, url: /#mission }
+    - { title: Approach, url: /#approach }
+    - { title: Cape Horn, url: /#cape-horn }
 - title: Tools
   url: /tools/
   children:

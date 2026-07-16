@@ -269,6 +269,9 @@ a:hover { color: var(--accent); }
 .tool-section:first-of-type .tool-section__media {
   padding-top: calc(var(--header-h) + 56px);
 }
+.tool-section--home:first-of-type .tool-section__media {
+  padding-top: 56px;
+}
 .tool-section__media::before {
   content: "";
   position: absolute;
@@ -337,6 +340,7 @@ a:hover { color: var(--accent); }
   color: var(--ink);
   line-height: 1.55;
 }
+.tool-section__panel > p { margin: 0; color: var(--ink); line-height: 1.6; }
 .tool-cta {
   align-self: flex-start;
   margin-top: auto;
@@ -353,6 +357,14 @@ a:hover { color: var(--accent); }
   transition: filter .2s ease;
 }
 .tool-cta:hover { filter: brightness(.92); color: var(--ink); }
+
+/* ---------- Section divider ---------- */
+.section-divider {
+  height: 6px;
+  margin: 0;
+  border: 0;
+  background: var(--band);
+}
 
 /* ---------- Contact form ---------- */
 .contact-success {
@@ -456,6 +468,9 @@ a:hover { color: var(--accent); }
   }
   .tool-section:first-of-type .tool-section__media {
     padding-top: calc(var(--header-h) + 32px);
+  }
+  .tool-section--home:first-of-type .tool-section__media {
+    padding-top: 40px;
   }
   .tool-section__panel {
     padding: 36px 24px;
