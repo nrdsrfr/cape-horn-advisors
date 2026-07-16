@@ -9,7 +9,7 @@ bundle install
 bundle exec jekyll serve
 ```
 
-Then open http://127.0.0.1:4000. Edits to content, layouts, or assets regenerate automatically (add `--livereload` if you want auto-refresh).
+Then open http://127.0.0.1:4000/cape-horn-advisors/ (the site currently serves under a `baseurl` for GitHub Pages project-page hosting — see below). Edits to content, layouts, or assets regenerate automatically (add `--livereload` if you want auto-refresh).
 
 ## Structure
 
@@ -26,11 +26,24 @@ This site uses the native GitHub Pages build (the `github-pages` gem, whiteliste
 1. Push this repository to GitHub.
 2. Repo **Settings → Pages → Source: "Deploy from a branch"**, branch `main`, folder `/ (root)`.
 
-The site serves at `https://<user>.github.io/<repo>/`.
+The site currently serves at `https://nrdsrfr.github.io/cape-horn-advisors/` — a **project page**, not a user/org page or custom domain, so every internal link and asset reference uses Jekyll's `relative_url` filter (never hardcoded `/assets/...` paths) and `_config.yml` sets:
+```yaml
+url: "https://nrdsrfr.github.io"
+baseurl: "/cape-horn-advisors"
+```
+`relative_url` prepends `baseurl` automatically, so this is the only place that needs to change per environment — no template edits required when the hosting target changes.
 
-### Custom domain (optional)
+### Custom domain
 
-To serve at `capehornadvisors.com`, add a `CNAME` file at the repo root containing `capehornadvisors.com`, configure the domain in **Settings → Pages**, and point your DNS at GitHub Pages. Leave `url`/`baseurl` in `_config.yml` empty for an apex domain.
+When `capehornadvisors.com` (or any custom domain) is ready:
+1. Add a `CNAME` file at the repo root containing the bare domain, e.g. `capehornadvisors.com`.
+2. Configure the domain under **Settings → Pages → Custom domain**.
+3. Update `_config.yml`:
+   ```yaml
+   url: "https://capehornadvisors.com"
+   baseurl: ""
+   ```
+4. Rebuild/redeploy — every link updates automatically via `relative_url`.
 
 ## Notes
 

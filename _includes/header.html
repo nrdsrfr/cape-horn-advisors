@@ -1,7 +1,7 @@
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="/">
-      <img src="/assets/images/CapeHorn_logo_BG2_bold.gif" alt="Cape Horn Advisors">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <img src="{{ '/assets/images/CapeHorn_logo_BG2_bold.gif' | relative_url }}" alt="Cape Horn Advisors">
     </a>
     <button class="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -14,16 +14,16 @@
               {% if item.url == "#" %}
                 <span class="nav-toggle-label" role="button" tabindex="0">{{ item.title }}</span>
               {% else %}
-                <a href="{{ item.url }}">{{ item.title }}</a>
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
               {% endif %}
               <ul class="submenu">
                 {% for child in item.children %}
-                  <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                  <li><a href="{{ child.url | relative_url }}">{{ child.title }}</a></li>
                 {% endfor %}
               </ul>
             </li>
           {% else %}
-            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
           {% endif %}
         {% endfor %}
       </ul>

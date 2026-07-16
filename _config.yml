@@ -1,7 +1,7 @@
 title: Cape Horn Advisors
 description: Business Advisory Services - Insight That Matters
-url: ""
-baseurl: ""
+url: "https://nrdsrfr.github.io"
+baseurl: "/cape-horn-advisors"
 plugins:
   - jekyll-seo-tag
 exclude:
