@@ -50,4 +50,26 @@
     successBox.hidden = false;
     successBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  
+  // ---- Tool quote slide-in (observe and stagger on enter) ----
+  var quotes = document.querySelectorAll('.tool-quote');
+  if (quotes && quotes.length) {
+    try {
+      var qObserver = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var idx = Array.prototype.indexOf.call(quotes, el);
+          var delay = 1000 + (idx * 400); // 1s + stagger
+          setTimeout(function () { el.classList.add('visible'); }, delay);
+          obs.unobserve(el);
+        });
+      }, { threshold: 0.2 });
+      quotes.forEach(function (q) { qObserver.observe(q); });
+    } catch (e) {
+      // IntersectionObserver not supported -> reveal immediately
+      quotes.forEach(function (q) { q.classList.add('visible'); });
+    }
+  }
+  
 })();
