@@ -1,65 +1,49 @@
 #!/usr/bin/env python3
-"""Promote preview/ over the root site content + assets.
+"""Promote preview/ (pages, layouts, includes, nav data, assets) over the root site.
 
 Run once you're happy with what's in preview/, or let the "Publish preview
 site" GitHub Action run it and open a PR:
     python3 scripts/promote_preview.py
 
-Overwrites the root content pages and assets/ with what's currently in
-preview/, stripping the /preview prefix and preview-* layout names back out.
+Overwrites the root content pages, _layouts/*, _includes/*, _data/nav.yml,
+and assets/ with what's currently in preview/, stripping /preview prefixes,
+preview-* names, and the noindex meta tag back out.
 """
 import pathlib
-import re
 import shutil
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _preview_transform import NOINDEX_LINE, strip_preview_prefix
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PREVIEW_DIR = ROOT / "preview"
 
-LAYOUT_MAP = {
-    "preview-home": "home",
-    "preview-default": "default",
-    "preview-page": "page",
-}
-
 PAGES = ["index.html", "tools.html", "contact.html", "partners.html", "sample-engagements.html"]
+LAYOUT_FILES = ["default.html", "home.html", "page.html"]
+INCLUDE_FILES = ["header.html", "footer.html"]
 
-FRONT_MATTER_RE = re.compile(r"\A---\n(.*?\n)---\n", re.DOTALL)
-PREVIEW_PATH_RE = re.compile(r"(\{\{\s*)'/preview(/[^']+)'")
 
-
-def transform(src: pathlib.Path) -> str:
-    text = src.read_text()
-    match = FRONT_MATTER_RE.match(text)
-    if not match:
-        raise SystemExit(f"{src}: expected Jekyll front matter at top of file")
-
-    front_lines = match.group(1).splitlines()
-    body = text[match.end():]
-
-    new_front_lines = []
-    for line in front_lines:
-        if line.startswith("layout:"):
-            value = line.split(":", 1)[1].strip()
-            line = f"layout: {LAYOUT_MAP.get(value, value)}"
-        elif line.startswith("permalink:"):
-            value = line.split(":", 1)[1].strip()
-            if not value.startswith("/preview"):
-                raise SystemExit(f"{src}: permalink {value!r} is not under /preview")
-            value = value[len("/preview"):] or "/"
-            line = f"permalink: {value}"
-        new_front_lines.append(line)
-
-    body = PREVIEW_PATH_RE.sub(r"\1'\2'", body)
-
-    return "---\n" + "\n".join(new_front_lines) + "\n---\n" + body
+def write(src: pathlib.Path, dest: pathlib.Path) -> None:
+    dest.write_text(strip_preview_prefix(src.read_text()))
+    print(f"wrote {dest.relative_to(ROOT)}")
 
 
 def main() -> None:
+    write(ROOT / "_data" / "preview_nav.yml", ROOT / "_data" / "nav.yml")
+
     for name in PAGES:
-        src = PREVIEW_DIR / name
-        dest = ROOT / name
-        dest.write_text(transform(src))
+        write(PREVIEW_DIR / name, ROOT / name)
+
+    for name in LAYOUT_FILES:
+        src = ROOT / "_layouts" / f"preview-{name}"
+        dest = ROOT / "_layouts" / name
+        text = strip_preview_prefix(src.read_text()).replace(NOINDEX_LINE, "")
+        dest.write_text(text)
         print(f"wrote {dest.relative_to(ROOT)}")
+
+    for name in INCLUDE_FILES:
+        write(ROOT / "_includes" / f"preview-{name}", ROOT / "_includes" / name)
 
     root_assets = ROOT / "assets"
     shutil.rmtree(root_assets)

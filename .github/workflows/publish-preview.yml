@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Promote preview/ over root content + assets
+      - name: Promote preview/ over root content, layouts, includes, and assets
         run: python3 scripts/promote_preview.py
 
       - name: Set up Ruby
@@ -34,12 +34,17 @@ jobs:
             partners.html
             sample-engagements.html
             assets/
+            _layouts/default.html
+            _layouts/home.html
+            _layouts/page.html
+            _includes/header.html
+            _includes/footer.html
           commit-message: "Publish preview site from ${{ github.ref_name }}"
           branch: publish-preview
           base: main
           delete-branch: true
           title: "Publish preview site"
           body: |
-            Promotes the current contents of `preview/` (from `${{ github.ref_name }}` @ ${{ github.sha }}) over the live site content and assets.
+            Promotes the current contents of `preview/` (from `${{ github.ref_name }}` @ ${{ github.sha }}) over the live site content, layouts, includes, and assets.
 
             Review the diff, then merge to make it live.

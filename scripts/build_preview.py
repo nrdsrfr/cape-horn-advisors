@@ -1,56 +1,36 @@
 #!/usr/bin/env python3
-"""Refresh preview/ as a standalone copy of the live site (content + assets).
+"""Refresh preview/ (pages, layouts, includes, nav data, assets) as a standalone
+copy of root.
 
-Run whenever you want to reset the preview sandbox to match the current
-root content, before making preview-only edits:
+Run whenever you want to reset the preview sandbox to match current root
+content, before making preview-only edits:
     python3 scripts/build_preview.py
 
-This overwrites preview/*.html and preview/assets/ — any hand edits made
-directly in preview/ since the last refresh are replaced.
+Overwrites preview/*.html, preview/assets/, _data/preview_nav.yml, and the
+preview-* layout/include twins in _layouts/ and _includes/ — any hand edits
+made since the last refresh are replaced. Use promote_preview.py to push
+preview/ changes back.
 """
 import pathlib
-import re
 import shutil
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _preview_transform import NOINDEX_LINE, add_preview_prefix
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PREVIEW_DIR = ROOT / "preview"
 
-# (source file, layout used in preview)
-PAGES = [
-    ("index.html", "preview-home"),
-    ("tools.html", "preview-default"),
-    ("contact.html", "preview-page"),
-    ("partners.html", "preview-page"),
-    ("sample-engagements.html", "preview-page"),
-]
+PAGES = ["index.html", "tools.html", "contact.html", "partners.html", "sample-engagements.html"]
+LAYOUT_FILES = ["default.html", "home.html", "page.html"]
+INCLUDE_FILES = ["header.html", "footer.html"]
 
-FRONT_MATTER_RE = re.compile(r"\A---\n(.*?\n)---\n", re.DOTALL)
-LITERAL_PATH_RE = re.compile(r"(\{\{\s*)'(/[^']+)'")
+VIEWPORT_LINE = '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
 
 
-def transform(src: pathlib.Path, preview_layout: str) -> str:
-    text = src.read_text()
-    match = FRONT_MATTER_RE.match(text)
-    if not match:
-        raise SystemExit(f"{src}: expected Jekyll front matter at top of file")
-
-    front_lines = match.group(1).splitlines()
-    body = text[match.end():]
-
-    new_front_lines = []
-    for line in front_lines:
-        if line.startswith("layout:"):
-            line = f"layout: {preview_layout}"
-        elif line.startswith("permalink:"):
-            value = line.split(":", 1)[1].strip()
-            line = f"permalink: /preview{value}"
-        new_front_lines.append(line)
-
-    # Prefix any root-relative literal path used in a Liquid filter
-    # (asset refs, cross-page links) so they stay inside /preview.
-    body = LITERAL_PATH_RE.sub(r"\1'/preview\2'", body)
-
-    return "---\n" + "\n".join(new_front_lines) + "\n---\n" + body
+def write(src: pathlib.Path, dest: pathlib.Path) -> None:
+    dest.write_text(add_preview_prefix(src.read_text()))
+    print(f"wrote {dest.relative_to(ROOT)}")
 
 
 def main() -> None:
@@ -62,11 +42,22 @@ def main() -> None:
     shutil.copytree(ROOT / "assets", preview_assets)
     print(f"copied assets/ -> {preview_assets.relative_to(ROOT)}")
 
-    for name, preview_layout in PAGES:
-        src = ROOT / name
-        dest = PREVIEW_DIR / name
-        dest.write_text(transform(src, preview_layout))
+    write(ROOT / "_data" / "nav.yml", ROOT / "_data" / "preview_nav.yml")
+
+    for name in PAGES:
+        write(ROOT / name, PREVIEW_DIR / name)
+
+    for name in LAYOUT_FILES:
+        src = ROOT / "_layouts" / name
+        dest = ROOT / "_layouts" / f"preview-{name}"
+        text = add_preview_prefix(src.read_text())
+        if name == "default.html":
+            text = text.replace(VIEWPORT_LINE, VIEWPORT_LINE + NOINDEX_LINE)
+        dest.write_text(text)
         print(f"wrote {dest.relative_to(ROOT)}")
+
+    for name in INCLUDE_FILES:
+        write(ROOT / "_includes" / name, ROOT / "_includes" / f"preview-{name}")
 
 
 if __name__ == "__main__":

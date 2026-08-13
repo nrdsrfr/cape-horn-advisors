@@ -8,22 +8,22 @@
     </button>
     <nav class="main-nav" aria-label="Primary">
       <ul>
-        {% for item in site.data.nav %}
+        {% for item in site.data.preview_nav %}
           {% if item.children %}
             <li class="has-children">
               {% if item.url == "#" %}
                 <span class="nav-toggle-label" role="button" tabindex="0">{{ item.title }}</span>
               {% else %}
-                <a href="{{ item.url | prepend: '/preview' | relative_url }}">{{ item.title }}</a>
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
               {% endif %}
               <ul class="submenu">
                 {% for child in item.children %}
-                  <li><a href="{{ child.url | prepend: '/preview' | relative_url }}">{{ child.title }}</a></li>
+                  <li><a href="{{ child.url | relative_url }}">{{ child.title }}</a></li>
                 {% endfor %}
               </ul>
             </li>
           {% else %}
-            <li><a href="{{ item.url | prepend: '/preview' | relative_url }}">{{ item.title }}</a></li>
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
           {% endif %}
         {% endfor %}
       </ul>
