@@ -1,0 +1,50 @@
+name: Publish preview site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  publish-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Promote preview/ over root content, layouts, includes, and assets
+        run: python3 scripts/promote_preview.py
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Verify site builds
+        run: bundle exec jekyll build
+
+      - name: Open PR publishing the preview site
+        uses: peter-evans/create-pull-request@v6
+        with:
+          add-paths: |
+            index.html
+            tools.html
+            contact.html
+            partners.html
+            sample-engagements.html
+            assets/
+            _layouts/default.html
+            _layouts/home.html
+            _layouts/page.html
+            _includes/header.html
+            _includes/footer.html
+          commit-message: "Publish preview site from ${{ github.ref_name }}"
+          branch: publish-preview
+          base: main
+          delete-branch: true
+          title: "Publish preview site"
+          body: |
+            Promotes the current contents of `preview/` (from `${{ github.ref_name }}` @ ${{ github.sha }}) over the live site content, layouts, includes, and assets.
+
+            Review the diff, then merge to make it live.
