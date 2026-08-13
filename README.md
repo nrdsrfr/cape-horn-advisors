@@ -48,5 +48,4 @@ When `capehornadvisors.com` (or any custom domain) is ready:
 ## Notes
 
 - The contact form has no backend: submitting opens the visitor's mail client addressed to `info@capehornadvisors.com`. A plain `mailto:` link is shown as a fallback.
-- The footer copyright year is preserved from the original ("COPYRIGHT 2017"); change it in `_includes/footer.html` if desired.
 - `capehornadvisors.WordPress.2026-07-16.xml` is the original export, kept for reference and excluded from the build.
